@@ -53,5 +53,9 @@ public class HTMLManager {
         }
       }
     }
+    while (!openingTags.isEmpty()) {
+      fixedTags.add(openingTags.pop().getMatching());
+    }
+    tags = fixedTags;
   }
 }
