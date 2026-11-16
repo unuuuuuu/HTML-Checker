@@ -26,4 +26,32 @@ public class HTMLManager {
 
     return result.toString();
   }
+
+  public void fixHTML() {
+    Stack<HTMLTag> openingTags = new Stack<HTMLTag>();
+    Queue<HTMLTag> fixedTags = new LinkedList<HTMLTag>();
+
+    while (!tags.isEmpty()) {
+      HTMLTag temp = tags.remove();
+
+      if (temp.isSelfClosing()) {
+        fixedTags.add(temp);
+      } else if (temp.isOpening()) {
+        fixedTags.add(temp);
+        openingTags.push(temp);
+      } else if (temp.isClosing()) {
+        for (int i = openingTags.size() - 1; i >= 0; i--) {
+          if (openingTags.peek().matches(temp)) {
+            break;
+          }
+          fixedTags.add(openingTags.pop().getMatching());
+        }
+
+        if (!openingTags.isEmpty()) {
+          fixedTags.add(temp);
+          openingTags.pop();
+        }
+      }
+    }
+  }
 }
